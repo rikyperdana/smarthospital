@@ -12,19 +12,8 @@ comps.emr = x => [
     m('h3', 'Form Pasien'),
     m(autoForm({
       id: 'formPasien',
-      schema: {
-        id: {
-          type: String, label: 'ID',
-          autoform: {type: 'hidden'},
-          autoValue: x => ors([
-            _.get(state, 'dataPasien.id'),
-            randomId()
-          ])
-        },
-        no_mr: {type: Number, label: 'No. MR'},
-        nama: {type: String, label: 'Nama Lengkap'},
-        ktp: {type: Number, label: 'KTP'}
-      },
+      schema: schemas.identitas,
+      layout: layouts.identitas,
       doc: state.dataPasien,
       submit: {value: state.dataPasien ? 'Update' : 'Simpan'},
       action: doc => confirm('Yakin simpan ini?') &&
@@ -56,7 +45,9 @@ comps.emr = x => [
     }, 'Database Pasien'),
     m(autoTable({
       id: 'databasePasien',
-      heads: {no_mr: 'No. MR', nama: 'Nama Lengkap', ktp: 'KTP'},
+      heads: {
+        no_mr: 'No. MR', nama_lengkap: 'Nama Lengkap', ktp: 'KTP'
+      },
       rows: (state.daftarPasien || []).map(i => ({row: i, data: i})),
       onclick: doc => [
         Object.assign(state, {dataPasien: doc, formPasien: true}),
@@ -73,7 +64,8 @@ comps.emr = x => [
             }), clearForm(), m.redraw()]
           }
         }
-      ]
+      ],
+      search: 'Cari Nama Pasien / No.MR / KTP'
     }))
   ]
 ]

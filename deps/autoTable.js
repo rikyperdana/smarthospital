@@ -63,7 +63,7 @@ autoTable = opts => ({view: () => m('.box',
         m.redraw()
       ]},
       m('.control.is-expanded', m('input.input.is-fullwidth', {
-        type: 'text', placeholder: 'Search data',
+        type: 'text', placeholder: opts.search,
       }))
     )),
 
