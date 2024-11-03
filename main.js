@@ -1,6 +1,6 @@
 m.mount(document.body, mitGen({
   theme: localStorage.appTheme || 'default',
-  brand: {name: 'home', full: 'AI UMRI'},
+  brand: {name: 'home', full: 'Smart Hospital'},
   start: {
     aichat: {full: 'Tanya AI', icon: 'comments', comp: comps.aichat},
     memories: {full: 'Memori', icon: 'brain', comp: comps.memories},

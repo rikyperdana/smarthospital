@@ -1,14 +1,34 @@
-let db = new Dexie("databasePasien")
-db.version(1).stores({pasien: 'id'})
-
-let daftarPasien = x => db.pasien.toArray(
+const
+daftarPasien = x => db.pasien.toArray(
   list => Object.assign(state, {
     daftarPasien: list
   }) && m.redraw()
-)
+),
+
+db = new Dexie("databasePasien")
+db.version(1).stores({pasien: 'id'})
 
 comps.emr = x => [
-  state.formPasien && [
+
+  state.formIGD && m('.box', [
+    m('h3', 'Form IGD'),
+    m(autoForm({
+      id: 'formIGD',
+      schema: {
+        diagnosa: {type: String}
+      },
+      action: console.log,
+      submit: {value: 'Simpan'},
+      buttons: [
+        {label: 'Batal', opt: {
+          class: 'is-warning',
+          onclick: x => toggleForm('formIGD')
+        }}
+      ]
+    }))
+  ]),
+
+  state.formPasien && m('.box', [
     m('h3', 'Form Pasien'),
     m(autoForm({
       id: 'formPasien',
@@ -18,27 +38,34 @@ comps.emr = x => [
       submit: {value: state.dataPasien ? 'Update' : 'Simpan'},
       action: doc => confirm('Yakin simpan ini?') &&
         db.pasien.put(doc).then(x => [
-          closeForm('formPasien'),
+          toggleForm('formPasien'),
           daftarPasien()
         ]),
-      buttons: [
-        state.dataPasien && {
-          label: 'Hapus',
-          opt: {
-            class: 'is-danger',
-            onclick: x =>
-              confirm('Yakin dihapus?') &&
-              db.pasien.delete(
-                state.dataPasien.id
-              ).then(x => [
-                daftarPasien(), clearForm(),
-                closeForm('formPasien')
-              ])
-          }
-        }
+      buttons: state.dataPasien && [
+        {label: 'IGD', opt: {
+          class: 'is-success',
+          onclick: x => [
+            toggleForm('formIGD'),
+            scroll(0, 0)
+          ]
+        }},
+        {label: 'Rawat Jalan'},
+
+        {label: 'Hapus', opt: {
+          class: 'is-danger',
+          onclick: x =>
+            confirm('Yakin dihapus?') &&
+            db.pasien.delete(
+              state.dataPasien.id
+            ).then(x => [
+              daftarPasien(), clearForm(),
+              toggleForm('formPasien')
+            ])
+        }}
       ]
     }))
-  ],
+  ]),
+
   [
     m('h3', {
       oncreate: x => daftarPasien()
