@@ -64,6 +64,35 @@ const schemas = {
       type: Number, autoform: {type: 'hidden'},
       autoValue: () => _.now()
     }
+  },
+
+  visit: {
+    idrawat: {
+      type: String, autoform: {type: 'hidden'},
+      autoValue: () => randomId()
+    },
+    tanggal: {
+      type: Number, autoform: {type: 'hidden'},
+      autoValue: () => _.now()
+    },
+    no_antrian: {type: String, optional: true, exclude: true},
+    cara_bayar: {type: Number, autoform: {
+      type: 'select', options: selects('cara_bayar')
+    }},
+    no_sep: {
+      type: String, optional: true,
+      autoform: {placeholder: 'isikan bila cara bayar bpjs'}
+    },
+    /*
+    klinik: {type: Number, autoform: {
+      type: 'select', options: selects('klinik')
+    }},
+    */
+    rujukan: {type: Number, autoform: {
+      type: 'select', options: selects('rujukan')
+    }},
+    sumber_rujukan: {type: String, optional: true},
+    penanggungjawab: {type: String, optional: true}
   }
 },
 

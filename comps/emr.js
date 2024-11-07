@@ -14,9 +14,7 @@ comps.emr = x => [
     m('h3', 'Form IGD'),
     m(autoForm({
       id: 'formIGD',
-      schema: {
-        diagnosa: {type: String}
-      },
+      schema: schemas.visit,
       action: console.log,
       submit: {value: 'Simpan'},
       buttons: [
@@ -85,10 +83,12 @@ comps.emr = x => [
           label: state.formPasien ? 'Tutup' : 'Tambah',
           opt: {
             class: state.formPasien ? 'is-warning' : 'is-info',
-            onclick: x => [Object.assign(state, {
-              formPasien: !state.formPasien,
-              dataPasien: false
-            }), clearForm(), m.redraw()]
+            onclick: x => [
+              toggleForm('formPasien'),
+              ['formIGD', 'dataPasien']
+              .forEach(i => delete state[i]),
+              clearForm(), m.redraw(), scroll(0, 0)
+           ]
           }
         }
       ],
