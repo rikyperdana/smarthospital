@@ -21,6 +21,6 @@ randomGemini = x => 'AIzaSy' + _.sample([
   'CfRKZ52ECnoHwNuZWGoGXJBcOf3KCX9mg'
 ]),
 
-toggleForm = id => Object.assign(
+toggleState = id => Object.assign(
   state, {[id]: !state[id]}
 )

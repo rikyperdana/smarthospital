@@ -39,7 +39,7 @@ const schemas = {
       autoform: {type: 'select', options: selects('nikah')}
     },
     pendidikan: {
-      type: Number, label: 'Pendidikan Terakhir', optional: true,
+      type: Number, label: 'Pendidikan', optional: true,
       autoform: {type: 'select', options: selects('pendidikan')}
     },
     darah: {
@@ -47,7 +47,7 @@ const schemas = {
       autoform: {type: 'select', options: selects('darah')}
     },
     pekerjaan: {
-      type: Number, label: 'Pekerjaan sekarang', optional: true,
+      type: Number, label: 'Pekerjaan', optional: true,
       autoform: {type: 'select', options: selects('pekerjaan')}
     },
     tempat_tinggal: {type: String, optional: true, label: 'Alamat tempat tinggal'},
@@ -80,7 +80,7 @@ const schemas = {
       type: 'select', options: selects('cara_bayar')
     }},
     no_sep: {
-      type: String, optional: true,
+      type: String, optional: true, label: 'SEP BPJS',
       autoform: {placeholder: 'isikan bila cara bayar bpjs'}
     },
     /*
@@ -106,5 +106,10 @@ layouts = {
       ['id', 'petugas', 'tanggal_input'] // yg hidden juga
     ],
     keluarga: [['ayah', 'ibu', 'pasangan']]
-  }
+  },
+  visit: {top: [
+      ['no_antrian', 'cara_bayar', 'no_sep'],
+      ['rujukan', 'sumber_rujukan'],
+      ['idrawat', 'tanggal']
+  ]}
 }

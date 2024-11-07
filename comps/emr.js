@@ -10,17 +10,35 @@ db.version(1).stores({pasien: 'id'})
 
 comps.emr = x => [
 
-  state.formIGD && m('.box', [
-    m('h3', 'Form IGD'),
-    m(autoForm({
-      id: 'formIGD',
-      schema: schemas.visit,
-      action: console.log,
-      submit: {value: 'Simpan'},
+  state.riwayatIGD && m('.box', [
+    state.formIGD && m('.box', [
+      m('h3', 'Form IGD'),
+      m(autoForm({
+        id: 'formIGD',
+        schema: schemas.visit,
+        layout: layouts.visit,
+        action: console.log,
+        submit: {value: 'Simpan'},
+        buttons: [
+          {label: 'Batal', opt: {
+            class: 'is-warning',
+            onclick: x => toggleState('formIGD')
+          }}
+        ],
+      }))
+    ]),
+
+    m('h3', 'Riwayat IGD'),
+    m(autoTable({
+      id: 'riwayatIGD',
+      heads: {
+        waktu: 'Waktu', perawat: 'Perawat', dokter: 'Dokter'
+      },
+      rows: [],
       buttons: [
-        {label: 'Batal', opt: {
-          class: 'is-warning',
-          onclick: x => toggleForm('formIGD')
+        {label: 'Tambah', opt: {
+          class: 'is-info',
+          onclick: x => toggleState('formIGD')
         }}
       ]
     }))
@@ -32,18 +50,19 @@ comps.emr = x => [
       id: 'formPasien',
       schema: schemas.identitas,
       layout: layouts.identitas,
-      doc: state.dataPasien,
+      doc: state.dataPasien.identitas,
       submit: {value: state.dataPasien ? 'Update' : 'Simpan'},
-      action: doc => confirm('Yakin simpan ini?') &&
-        db.pasien.put(doc).then(x => [
-          toggleForm('formPasien'),
-          daftarPasien()
-        ]),
+      action: doc => confirm('Yakin simpan ini?') && withAs(
+        {id: doc.id, identitas: doc},
+        pasien => db.pasien.put(pasien).then(x => [
+          toggleState('formPasien'), daftarPasien()
+        ])
+      ),
       buttons: state.dataPasien && [
         {label: 'IGD', opt: {
           class: 'is-success',
           onclick: x => [
-            toggleForm('formIGD'),
+            toggleState('riwayatIGD'),
             scroll(0, 0)
           ]
         }},
@@ -57,7 +76,7 @@ comps.emr = x => [
               state.dataPasien.id
             ).then(x => [
               daftarPasien(), clearForm(),
-              toggleForm('formPasien')
+              toggleState('formPasien')
             ])
         }}
       ]
@@ -73,7 +92,8 @@ comps.emr = x => [
       heads: {
         no_mr: 'No. MR', nama_lengkap: 'Nama Lengkap', ktp: 'KTP'
       },
-      rows: (state.daftarPasien || []).map(i => ({row: i, data: i})),
+      rows: (state.daftarPasien || [])
+        .map(i => ({row: i.identitas, data: i})),
       onclick: doc => [
         Object.assign(state, {dataPasien: doc, formPasien: true}),
         m.redraw()
@@ -84,7 +104,7 @@ comps.emr = x => [
           opt: {
             class: state.formPasien ? 'is-warning' : 'is-info',
             onclick: x => [
-              toggleForm('formPasien'),
+              toggleState('formPasien'),
               ['formIGD', 'dataPasien']
               .forEach(i => delete state[i]),
               clearForm(), m.redraw(), scroll(0, 0)
