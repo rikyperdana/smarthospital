@@ -23,4 +23,8 @@ randomGemini = x => 'AIzaSy' + _.sample([
 
 toggleState = id => Object.assign(
   state, {[id]: !state[id]}
-)
+),
+
+hari = (timestamp, hour) =>
+  timestamp && moment(timestamp)
+  .format('Do MMMM YYYY'+(hour ? ', hh:mm' : ''))

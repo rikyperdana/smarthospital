@@ -17,9 +17,19 @@ comps.emr = x => [
         id: 'formIGD',
         schema: schemas.visit,
         layout: layouts.visit,
-        action: console.log,
         submit: {value: 'Simpan'},
+        action: doc => confirm('Yakin simpan SOAP?') && withAs(
+          Object.assign(state.dataPasien, {
+            igd: [...state.dataPasien.igd || [], doc]
+          }),
+          updated => db.pasien.put(updated).then(x => m.redraw())
+        ),
         buttons: [
+          {label: 'Perawat', opt: {
+            label: 'is-warning',
+            onclick: x => toggleState('soapPerawat')
+          }},
+          {label: 'Dokter'},
           {label: 'Batal', opt: {
             class: 'is-warning',
             onclick: x => toggleState('formIGD')
@@ -32,9 +42,13 @@ comps.emr = x => [
     m(autoTable({
       id: 'riwayatIGD',
       heads: {
-        waktu: 'Waktu', perawat: 'Perawat', dokter: 'Dokter'
+        tanggal: 'Tanggal', cara_bayar: 'Cara Bayar'
       },
-      rows: [],
+      rows: (_.get(state, 'dataPasien.igd') || [])
+        .map(i => ({row: {
+          tanggal: hari(i.tanggal),
+          cara_bayar: lookUp('cara_bayar', i.cara_bayar)
+        }, data: i})),
       buttons: [
         {label: 'Tambah', opt: {
           class: 'is-info',

@@ -36,7 +36,7 @@ selects = (name, sort) => _.reduce(
   , {}
 )[name],
 
-look = (category, value) => _.get(
+lookUp = (category, value) => _.get(
   selects(category)().find(
     (i, j) => j+1 === value
   ), 'label'
