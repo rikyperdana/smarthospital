@@ -93,7 +93,167 @@ const schemas = {
     }},
     sumber_rujukan: {type: String, optional: true},
     penanggungjawab: {type: String, optional: true}
-  }
+  },
+
+  soapPerawat: {
+    anamnesa: {type: String, autoform: {type: 'textarea'}},
+    fisik: {type: Object},
+    'fisik.tekanan_darah': {type: Object,},
+    'fisik.tekanan_darah.systolic': {type: Number, optional: true},
+    'fisik.tekanan_darah.diastolic': {type: Number, optional: true},
+    'fisik.nadi': {type: Number, optional: true},
+    'fisik.suhu': {type: Number, optional: true},
+    'fisik.pernapasan': {type: Number, optional: true},
+    'fisik.tinggi': {type: Number, optional: true},
+    'fisik.berat': {type: Number, optional: true},
+    'fisik.lila': {type: Number, optional: true, label: 'Lingkar lengan atas'},
+    tracer: {type: String, optional: true, label: 'File Tracer'},
+    perawat: {
+      type: String, autoform: {type: 'hidden'},
+      autoValue: () => _.get(state.login, '_id')
+    }
+  },
+
+  soapDokter: {
+    anamnesa: {type: String, autoform: {type: 'textarea'}},
+    diagnosa: {type: Array},
+    'diagnosa.$': {type: Object},
+    'diagnosa.$.text': {type: String},
+    tindakan: {type: Array, optional: true},
+    'tindakan.$': {type: Object},
+    'tindakan.$.idtindakan': {type: String, autoform: {
+      type: 'select', options: (name, doc) =>
+        _.sortBy(state.daftarTindakan.map(i =>
+          ({value: i._id, label: i.nama})
+        ), ['label'])
+    }},
+    'tindakan.$.jadwal': {
+      type: Date, optional: true, autoform: {
+        type: 'datetime-local',
+        help: 'Hanya untuk penjadwalan kedepan'
+      }
+    },
+    bhp: {type: Array, optional: true, label: 'Barang habis pakai'},
+    'bhp.$': {type: Object},
+    'bhp.$.idbarang': {
+      type: String, label: 'Nama Barang',
+      autoform: {type: 'select', options: () =>
+        state.bhpList
+        .sort((a, b) => a.nama > b.nama ? 1 : -1)
+        .map(i => ({value: i._id, label: i.nama}))
+      }
+    },
+    'bhp.$.jumlah': {type: Number},
+    obat: {type: Array, optional: true},
+    'obat.$': {type: Object},
+    'obat.$.search': {
+      type: String, optional: true,
+      autoRedraw: true, label: 'Pencarian obat',
+      autoform: {placeholder: 'Gunakan huruf kecil'}
+    },
+    'obat.$.idbarang': {
+      type: String, label: 'Nama Obat', autoform: {
+        type: 'select', options: (name, doc) =>
+          state.drugList.filter(i => withAs(
+            _.get(doc, _.initial(name.split('.')).join('.')+'.search'),
+            search => search ? _.includes(_.lowerCase(i.nama), search) : true
+          ))
+          .sort((a, b) => a.nama > b.nama ? 1 : -1)
+          .map(i => ({value: i._id, label: i.nama}))
+      }
+    },
+    'obat.$.jumlah': {type: Number},
+    'obat.$.puyer': {
+      type: Number, optional: true,
+      autoform: {help: 'Kode unik puyer'}
+    },
+    'obat.$.aturan': {type: String, optional: true},
+    radio: {type: Array, optional: true, label: 'Radiologi'},
+    'radio.$': {type: Object},
+    'radio.$.grup': {
+      type: String, optional: true, autoRedraw: true,
+      autoform: {
+        help: 'Saring berdasarkan kategori',
+        type: 'select', options: () => _.uniq(
+          state.references
+          .filter(i => i[0] === 'radiologi')
+          .map(i => i[1])
+        ).map(i => ({value: i, label: _.startCase(i)}))
+      }
+    },
+    'radio.$.idradio': {type: String, autoform: {
+      type: 'select', options: (name, doc) =>
+        _.sortBy(
+          state.references.filter(i => ands([
+            i[0] === 'radiologi',
+            withAs(
+              _.initial(name.split('.')).join('.') + '.grup',
+              siblingGrup => _.get(doc, siblingGrup) ?
+                doc[siblingGrup] === i[1] : true
+            )
+          ]))
+          .map(i => ({value: i._id, label: i.nama})),
+          'label'
+        )
+    }},
+    'radio.$.catatan': {type: String, optional: true},
+    labor: {type: Array, optional: true, label: 'Laboratorium'},
+    'labor.$': {type: Object},
+    'labor.$.grup': {
+      type: String, optional: true, autoRedraw: true,
+      autoform: {
+        help: 'Saring berdasarkan kategori',
+        type: 'select', options: () => _.uniq(
+          state.references
+          .filter(i => i[0] === 'laboratorium')
+          .map(i => i[1])
+        ).map(i => ({value: i, label: _.startCase(i)}))
+      }
+    },
+    'labor.$.idlabor': {type: String, autoform: {
+      type: 'select', options: (name, doc) =>
+        _.sortBy(
+          state.references.filter(i => ands([
+            i[0] === 'laboratorium',
+            withAs(
+              _.initial(name.split('.')).join('.') + '.grup',
+              siblingGrup => _.get(doc, siblingGrup) ?
+                doc[siblingGrup] === i[1] : true
+            )
+          ]))
+          .map(i => ({value: i._id, label: i.nama})),
+          'label'
+        )
+    }},
+    planning: {
+      type: String, optional: true,
+      autoform: {type: 'textarea'}
+    },
+    keluar: {type: Number, autoform: {
+      type: 'select', options: selects('keluar')
+    }},
+    rujuk: {
+      type: Number, optional: true, label: 'Konsultasikan ke',
+      autoform: {
+        type: 'select',
+        help: 'Hanya diisi bila pilihan keluar adalah Konsultasikan ke Poliklinik lain',
+        options: selects('klinik')
+      }
+    },
+    tracer: {type: String, optional: true, label: 'File Tracer'},
+    spm: {
+      type: Number, autoform: {type: 'hidden'},
+      autoValue: () => _.now() - state.spm
+    },
+    dokter: {
+      type: String, autoform: {type: 'hidden'},
+      autoValue: () => _.get(state.login, '_id')
+    },
+    tanggal: {
+      type: String, autoform: {type: 'hidden'},
+      autoValue: () => _.now()
+    }
+  },
 },
 
 layouts = {
@@ -111,5 +271,17 @@ layouts = {
       ['no_antrian', 'cara_bayar', 'no_sep'],
       ['rujukan', 'sumber_rujukan'],
       ['idrawat', 'tanggal']
-  ]}
+  ]},
+  soapPerawat: {
+    top: [
+      ['anamnesa', 'tracer'],
+      ['fisik'], ['perawat'],
+    ],
+    fisik: [
+      ['tekanan_darah'],
+      ['nadi', 'suhu', 'pernapasan'],
+      ['tinggi', 'berat', 'lila']
+    ],
+    'fisik.tekanan_darah': [['systolic', 'diastolic']],
+  },
 }

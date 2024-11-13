@@ -10,21 +10,34 @@ db.version(1).stores({pasien: 'id'})
 
 comps.emr = x => [
 
+  state.soapPerawat && m('.box', [
+    m('h3', 'Form Perawat IGD'),
+    m(autoForm({
+      id: 'formPerawatIGD',
+      schema: schemas.soapPerawat,
+      layout: layouts.soapPerawat,
+      action: console.log,
+    }))
+  ]),
+
   state.riwayatIGD && m('.box', [
     state.formIGD && m('.box', [
-      m('h3', 'Form IGD'),
+      m('h3', `${state.igdPasien ? 'Detail' : 'Form'} Kunjungan IGD`),
       m(autoForm({
         id: 'formIGD',
         schema: schemas.visit,
         layout: layouts.visit,
+        doc: state.igdPasien,
         submit: {value: 'Simpan'},
         action: doc => confirm('Yakin simpan SOAP?') && withAs(
           Object.assign(state.dataPasien, {
             igd: [...state.dataPasien.igd || [], doc]
           }),
-          updated => db.pasien.put(updated).then(x => m.redraw())
+          updated => db.pasien.put(updated).then(x => [
+            toggleState('riwayatIGD')
+          ])
         ),
-        buttons: [
+        buttons: state.igdPasien && [
           {label: 'Perawat', opt: {
             label: 'is-warning',
             onclick: x => toggleState('soapPerawat')
@@ -49,6 +62,11 @@ comps.emr = x => [
           tanggal: hari(i.tanggal),
           cara_bayar: lookUp('cara_bayar', i.cara_bayar)
         }, data: i})),
+      onclick: data => [
+        toggleState('formIGD'),
+        Object.assign(state, {igdPasien: data}),
+        m.redraw()
+      ],
       buttons: [
         {label: 'Tambah', opt: {
           class: 'is-info',
@@ -64,7 +82,7 @@ comps.emr = x => [
       id: 'formPasien',
       schema: schemas.identitas,
       layout: layouts.identitas,
-      doc: state.dataPasien.identitas,
+      doc: _.get(state, 'dataPasien.identitas'),
       submit: {value: state.dataPasien ? 'Update' : 'Simpan'},
       action: doc => confirm('Yakin simpan ini?') && withAs(
         {id: doc.id, identitas: doc},
@@ -80,8 +98,6 @@ comps.emr = x => [
             scroll(0, 0)
           ]
         }},
-        {label: 'Rawat Jalan'},
-
         {label: 'Hapus', opt: {
           class: 'is-danger',
           onclick: x =>
