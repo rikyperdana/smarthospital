@@ -120,111 +120,15 @@ const schemas = {
     'diagnosa.$': {type: Object},
     'diagnosa.$.text': {type: String},
     tindakan: {type: Array, optional: true},
-    'tindakan.$': {type: Object},
-    'tindakan.$.idtindakan': {type: String, autoform: {
-      type: 'select', options: (name, doc) =>
-        _.sortBy(state.daftarTindakan.map(i =>
-          ({value: i._id, label: i.nama})
-        ), ['label'])
-    }},
-    'tindakan.$.jadwal': {
-      type: Date, optional: true, autoform: {
-        type: 'datetime-local',
-        help: 'Hanya untuk penjadwalan kedepan'
-      }
-    },
+    'tindakan.$': {type: String},
     bhp: {type: Array, optional: true, label: 'Barang habis pakai'},
-    'bhp.$': {type: Object},
-    'bhp.$.idbarang': {
-      type: String, label: 'Nama Barang',
-      autoform: {type: 'select', options: () =>
-        state.bhpList
-        .sort((a, b) => a.nama > b.nama ? 1 : -1)
-        .map(i => ({value: i._id, label: i.nama}))
-      }
-    },
-    'bhp.$.jumlah': {type: Number},
+    'bhp.$': {type: String},
     obat: {type: Array, optional: true},
-    'obat.$': {type: Object},
-    'obat.$.search': {
-      type: String, optional: true,
-      autoRedraw: true, label: 'Pencarian obat',
-      autoform: {placeholder: 'Gunakan huruf kecil'}
-    },
-    'obat.$.idbarang': {
-      type: String, label: 'Nama Obat', autoform: {
-        type: 'select', options: (name, doc) =>
-          state.drugList.filter(i => withAs(
-            _.get(doc, _.initial(name.split('.')).join('.')+'.search'),
-            search => search ? _.includes(_.lowerCase(i.nama), search) : true
-          ))
-          .sort((a, b) => a.nama > b.nama ? 1 : -1)
-          .map(i => ({value: i._id, label: i.nama}))
-      }
-    },
-    'obat.$.jumlah': {type: Number},
-    'obat.$.puyer': {
-      type: Number, optional: true,
-      autoform: {help: 'Kode unik puyer'}
-    },
-    'obat.$.aturan': {type: String, optional: true},
+    'obat.$': {type: String},
     radio: {type: Array, optional: true, label: 'Radiologi'},
-    'radio.$': {type: Object},
-    'radio.$.grup': {
-      type: String, optional: true, autoRedraw: true,
-      autoform: {
-        help: 'Saring berdasarkan kategori',
-        type: 'select', options: () => _.uniq(
-          state.references
-          .filter(i => i[0] === 'radiologi')
-          .map(i => i[1])
-        ).map(i => ({value: i, label: _.startCase(i)}))
-      }
-    },
-    'radio.$.idradio': {type: String, autoform: {
-      type: 'select', options: (name, doc) =>
-        _.sortBy(
-          state.references.filter(i => ands([
-            i[0] === 'radiologi',
-            withAs(
-              _.initial(name.split('.')).join('.') + '.grup',
-              siblingGrup => _.get(doc, siblingGrup) ?
-                doc[siblingGrup] === i[1] : true
-            )
-          ]))
-          .map(i => ({value: i._id, label: i.nama})),
-          'label'
-        )
-    }},
-    'radio.$.catatan': {type: String, optional: true},
+    'radio.$': {type: String},
     labor: {type: Array, optional: true, label: 'Laboratorium'},
-    'labor.$': {type: Object},
-    'labor.$.grup': {
-      type: String, optional: true, autoRedraw: true,
-      autoform: {
-        help: 'Saring berdasarkan kategori',
-        type: 'select', options: () => _.uniq(
-          state.references
-          .filter(i => i[0] === 'laboratorium')
-          .map(i => i[1])
-        ).map(i => ({value: i, label: _.startCase(i)}))
-      }
-    },
-    'labor.$.idlabor': {type: String, autoform: {
-      type: 'select', options: (name, doc) =>
-        _.sortBy(
-          state.references.filter(i => ands([
-            i[0] === 'laboratorium',
-            withAs(
-              _.initial(name.split('.')).join('.') + '.grup',
-              siblingGrup => _.get(doc, siblingGrup) ?
-                doc[siblingGrup] === i[1] : true
-            )
-          ]))
-          .map(i => ({value: i._id, label: i.nama})),
-          'label'
-        )
-    }},
+    'labor.$': {type: String},
     planning: {
       type: String, optional: true,
       autoform: {type: 'textarea'}

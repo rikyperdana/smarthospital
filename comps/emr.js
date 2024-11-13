@@ -10,6 +10,21 @@ db.version(1).stores({pasien: 'id'})
 
 comps.emr = x => [
 
+  state.soapDokter && m('.box', [
+    m('h3', 'Form Dokter IGD'),
+    m(autoForm({
+      id: 'formDokterIGD',
+      schema: schemas.soapDokter,
+      action: console.log,
+      buttons: [
+        {label: 'Batal', opt: {
+          class: 'is-warning',
+          onclick: x => toggleState('soapDokter')
+        }}
+      ]
+    }))
+  ]),
+
   state.soapPerawat && m('.box', [
     m('h3', 'Form Perawat IGD'),
     m(autoForm({
@@ -17,6 +32,12 @@ comps.emr = x => [
       schema: schemas.soapPerawat,
       layout: layouts.soapPerawat,
       action: console.log,
+      buttons: [
+        {label: 'Batal', opt: {
+          class: 'is-warning',
+          onclick: x => toggleState('soapPerawat')
+        }}
+      ]
     }))
   ]),
 
@@ -39,10 +60,13 @@ comps.emr = x => [
         ),
         buttons: state.igdPasien && [
           {label: 'Perawat', opt: {
-            label: 'is-warning',
+            class: 'is-success',
             onclick: x => toggleState('soapPerawat')
           }},
-          {label: 'Dokter'},
+          {label: 'Dokter', opt: {
+            class: 'is-success',
+            onclick: x => toggleState('soapDokter')
+          }},
           {label: 'Batal', opt: {
             class: 'is-warning',
             onclick: x => toggleState('formIGD')
