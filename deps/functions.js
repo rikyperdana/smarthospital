@@ -23,7 +23,7 @@ randomGemini = x => 'AIzaSy' + _.sample([
 
 toggleState = id => Object.assign(
   state, {[id]: !state[id]}
-),
+) && m.redraw(),
 
 hari = (timestamp, hour) =>
   timestamp && moment(timestamp)

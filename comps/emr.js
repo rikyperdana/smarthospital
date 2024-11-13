@@ -15,7 +15,15 @@ comps.emr = x => [
     m(autoForm({
       id: 'formDokterIGD',
       schema: schemas.soapDokter,
-      action: console.log,
+      action: doc => db.pasien.put(
+        _.assign(state.dataPasien, {
+          igd: state.dataPasien.igd.map(
+            i => i.idrawat === state.igdPasien.idrawat ? _.assign(
+              state.igdPasien, {soapDokter: doc}
+            ) : i
+          )
+        })
+      ).then(x => [toggleState('soapDokter')]),
       buttons: [
         {label: 'Batal', opt: {
           class: 'is-warning',
@@ -31,7 +39,15 @@ comps.emr = x => [
       id: 'formPerawatIGD',
       schema: schemas.soapPerawat,
       layout: layouts.soapPerawat,
-      action: console.log,
+      action: doc => db.pasien.put(
+        _.assign(state.dataPasien, {
+          igd: state.dataPasien.igd.map(
+            i => i.idrawat === state.igdPasien.idrawat ? _.assign(
+              state.igdPasien, {soapPerawat: doc}
+            ) : i
+          )
+        })
+      ).then(x => [toggleState('soapPerawat')]),
       buttons: [
         {label: 'Batal', opt: {
           class: 'is-warning',
