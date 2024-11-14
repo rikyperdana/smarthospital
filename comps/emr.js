@@ -149,6 +149,12 @@ comps.emr = x => [
             scroll(0, 0)
           ]
         }},
+        {label: 'Bahas AI', opt: {
+          class: 'is-info', onclick: x => [
+            mgState.comp = comps.aichat,
+            scroll(0, 0), m.redraw()
+          ]
+        }},
         {label: 'Hapus', opt: {
           class: 'is-danger',
           onclick: x =>

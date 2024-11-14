@@ -7,6 +7,17 @@ randomId = x => Math.random().toString(36).slice(2)
 comps.aichat = x => [
   m('h3', 'Mari berbincang'),
 
+  // Lampiran EMR seorang pasien
+  ifit(
+    state.dataPasien,
+    pasien => m('article.message', m('.message-header', [
+      m('p', `EMR Pasien: ${pasien.identitas.nama_lengkap}`),
+      m('button.delete', {
+        onclick: x => toggleState('dataPasien')
+      })
+    ]))
+  ),
+
   // Threads of interactions
   JSON.parse(localStorage.threads || '[]')
   .map(thread => m(
