@@ -27,4 +27,7 @@ toggleState = id => Object.assign(
 
 hari = (timestamp, hour) =>
   timestamp && moment(timestamp)
-  .format('Do MMMM YYYY'+(hour ? ', hh:mm' : ''))
+  .format('Do MMMM YYYY'+(hour ? ', hh:mm' : '')),
+
+db = new Dexie("databasePasien")
+db.version(1).stores({pasien: 'id'})

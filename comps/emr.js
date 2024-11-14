@@ -1,15 +1,22 @@
+/* TOC:
+  Form Dokter IGD
+  Form Perawat IGD
+  Form Visit IGD seorang pasien
+  Daftar Riwayat IGD seorang pasien
+  Form seorang pasien (CRUD)
+  Daftar seluruh pasien
+*/
+
 const
 daftarPasien = x => db.pasien.toArray(
   list => Object.assign(state, {
     daftarPasien: list
   }) && m.redraw()
-),
-
-db = new Dexie("databasePasien")
-db.version(1).stores({pasien: 'id'})
+)
 
 comps.emr = x => [
 
+  // Form Dokter IGD
   state.soapDokter && m('.box', [
     m('h3', 'Form Dokter IGD'),
     m(autoForm({
@@ -33,6 +40,7 @@ comps.emr = x => [
     }))
   ]),
 
+  // Form Perawat IGD
   state.soapPerawat && m('.box', [
     m('h3', 'Form Perawat IGD'),
     m(autoForm({
@@ -57,6 +65,7 @@ comps.emr = x => [
     }))
   ]),
 
+  // Form Visit IGD seorang pasien
   state.riwayatIGD && m('.box', [
     state.formIGD && m('.box', [
       m('h3', `${state.igdPasien ? 'Detail' : 'Form'} Kunjungan IGD`),
@@ -91,6 +100,7 @@ comps.emr = x => [
       }))
     ]),
 
+    // Daftar Riwayat IGD seorang pasien
     m('h3', 'Riwayat IGD'),
     m(autoTable({
       id: 'riwayatIGD',
@@ -116,6 +126,7 @@ comps.emr = x => [
     }))
   ]),
 
+  // Form seorang pasien (CRUD)
   state.formPasien && m('.box', [
     m('h3', 'Form Pasien'),
     m(autoForm({
@@ -153,6 +164,7 @@ comps.emr = x => [
     }))
   ]),
 
+  // Daftar seluruh pasien
   [
     m('h3', {
       oncreate: x => daftarPasien()
