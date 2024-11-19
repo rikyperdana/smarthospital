@@ -154,7 +154,7 @@ const schemas = {
       autoValue: () => _.get(state.login, '_id')
     },
     tanggal: {
-      type: String, autoform: {type: 'hidden'},
+      type: Number, autoform: {type: 'hidden'},
       autoValue: () => _.now()
     }
   },

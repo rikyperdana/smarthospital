@@ -42,7 +42,12 @@ comps.aichat = x => [
       },
     }},
     action: doc => doc.message && withAs({
-      threads: JSON.parse(localStorage.threads || '[]'),
+      threads: JSON.parse(localStorage.threads || `[${
+        JSON.stringify({
+          message: replaceTimeStamp(state.dataPasien),
+          role: 'user', requestTime: +(new Date())
+        })
+      }]`),
       query: {...doc, role: 'user', requestTime: +(new Date())}
     }, ({threads, query, key}) => [
       Object.assign(state, {isLoading: true}),

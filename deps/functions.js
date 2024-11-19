@@ -29,5 +29,14 @@ hari = (timestamp, hour) =>
   timestamp && moment(timestamp)
   .format('Do MMMM YYYY'+(hour ? ', hh:mm' : '')),
 
+replaceTimeStamp = obj => (withAs(
+  JSON.stringify(obj, null, 2),
+  text => text.match(/\b\d{13}\b/g).reduce(
+    (modText, stamp) => modText.replace(
+      stamp, `"${hari(+stamp, true)}"`
+    ), text
+  )
+)),
+
 db = new Dexie("databasePasien")
 db.version(1).stores({pasien: 'id'})

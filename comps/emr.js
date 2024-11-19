@@ -22,6 +22,9 @@ comps.emr = x => [
     m(autoForm({
       id: 'formDokterIGD',
       schema: schemas.soapDokter,
+      doc: _.get((state.dataPasien.igd || []).find(
+        i => i.idrawat === state.igdPasien.idrawat
+      ), 'soapDokter'),
       action: doc => db.pasien.put(
         _.assign(state.dataPasien, {
           igd: state.dataPasien.igd.map(
@@ -46,6 +49,9 @@ comps.emr = x => [
     m(autoForm({
       id: 'formPerawatIGD',
       schema: schemas.soapPerawat,
+      doc: _.get((state.dataPasien.igd || []).find(
+        i => i.idrawat === state.igdPasien.idrawat
+      ), 'soapPerawat'),
       layout: layouts.soapPerawat,
       action: doc => db.pasien.put(
         _.assign(state.dataPasien, {
@@ -57,7 +63,7 @@ comps.emr = x => [
         })
       ).then(x => [toggleState('soapPerawat')]),
       buttons: [
-        {label: 'Batal', opt: {
+        {label: 'Tutup', opt: {
           class: 'is-warning',
           onclick: x => toggleState('soapPerawat')
         }}
@@ -80,7 +86,7 @@ comps.emr = x => [
             igd: [...state.dataPasien.igd || [], doc]
           }),
           updated => db.pasien.put(updated).then(x => [
-            toggleState('riwayatIGD')
+            toggleState('formIGD')
           ])
         ),
         buttons: state.igdPasien && [
@@ -92,7 +98,7 @@ comps.emr = x => [
             class: 'is-success',
             onclick: x => toggleState('soapDokter')
           }},
-          {label: 'Batal', opt: {
+          {label: 'Tutup', opt: {
             class: 'is-warning',
             onclick: x => toggleState('formIGD')
           }}
