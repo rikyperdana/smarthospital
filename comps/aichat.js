@@ -9,7 +9,7 @@ comps.aichat = x => [
 
   // Lampiran EMR seorang pasien
   ifit(
-    state.dataPasien,
+    humanReadable(state.dataPasien),
     pasien => m('article.message', m('.message-header', [
       m('p', `EMR Pasien: ${pasien.identitas.nama_lengkap}`),
       m('button.delete', {
