@@ -9,7 +9,7 @@ comps.aichat = x => [
 
   // Lampiran EMR seorang pasien
   ifit(
-    humanReadable(state.dataPasien),
+    state.dataPasien,
     pasien => m('article.message', m('.message-header', [
       m('p', `EMR Pasien: ${pasien.identitas.nama_lengkap}`),
       m('button.delete', {
@@ -20,6 +20,7 @@ comps.aichat = x => [
 
   // Threads of interactions
   JSON.parse(localStorage.threads || '[]')
+  .filter(i => i.type !== 'pasien')
   .map(thread => m(
     'article.message',
     {class: [
@@ -44,11 +45,11 @@ comps.aichat = x => [
     action: doc => doc.message && withAs({
       threads: JSON.parse(localStorage.threads || `[${
         JSON.stringify({
-          message: replaceTimeStamp(state.dataPasien),
-          role: 'user', requestTime: +(new Date())
+          message: JSON.stringify(humanReadable(state.dataPasien)),
+          role: 'user', type: 'pasien', requestTime: _.now()
         })
       }]`),
-      query: {...doc, role: 'user', requestTime: +(new Date())}
+      query: {...doc, role: 'user', requestTime: _.now()}
     }, ({threads, query, key}) => [
       Object.assign(state, {isLoading: true}),
       localStorage.setItem('threads', JSON.stringify([
@@ -78,7 +79,7 @@ comps.aichat = x => [
               )),
               {
                 message: messagePool, role: 'model',
-                responseTime: +(new Date())
+                responseTime: _.now()
               }
             ])),
             m.redraw()

@@ -29,14 +29,25 @@ hari = (timestamp, hour) =>
   timestamp && moment(timestamp)
   .format('Do MMMM YYYY'+(hour ? ', hh:mm' : '')),
 
-replaceTimeStamp = obj => (withAs(
-  JSON.stringify(obj, null, 2),
-  text => text.match(/\b\d{13}\b/g).reduce(
-    (modText, stamp) => modText.replace(
-      stamp, `"${hari(+stamp, true)}"`
-    ), text
-  )
-)),
+isTimestamp = val =>
+  Number.isInteger(val) &&
+  (''+val).length === 13,
+
+fromPairs = arr => arr.reduce(
+  (acc, val) => (acc[val[0]] = val[1], acc), {}
+),
+
+humanReadable = (val, key) => val &&
+  typeof(val) === 'object' ? fromPairs(
+    Object.keys(val).map(item => [
+      item, humanReadable(
+        val[item], item
+      )
+    ])
+  ) : ors([
+    isTimestamp(val) && hari(val),
+    references[key]?.[val-1], val
+  ]),
 
 db = new Dexie("databasePasien")
 db.version(1).stores({pasien: 'id'})
