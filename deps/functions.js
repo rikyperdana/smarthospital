@@ -31,7 +31,7 @@ hari = (timestamp, hour) =>
 
 isTimestamp = val =>
   Number.isInteger(val) &&
-  (''+val).length === 13,
+  (''+val).length >= 12,
 
 fromPairs = arr => arr.reduce(
   (acc, val) => (acc[val[0]] = val[1], acc), {}
