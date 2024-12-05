@@ -52,6 +52,14 @@ comps.aichat = x => [
           role: 'user', type: 'pasien', requestTime: _.now()
         })
       }]`),
+      threads: JSON.parse(ors([
+        localStorage.threads,
+        state.dataPasien && `[${JSON.stringify({
+          message: JSON.stringify(humanReadable(state.dataPasien)),
+          role: 'user', type: 'pasien', requestTime: _.now()
+        })}]`,
+        '[]'
+      ])),
       query: {...doc, role: 'user', requestTime: _.now()}
     }, ({threads, query, key}) => [
       Object.assign(state, {isLoading: true}),

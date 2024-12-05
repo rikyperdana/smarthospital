@@ -198,9 +198,11 @@ comps.emr = x => [
           opt: {
             class: state.formPasien ? 'is-warning' : 'is-info',
             onclick: x => [
-              toggleState('formPasien'),
-              ['formIGD', 'dataPasien']
-              .forEach(i => delete state[i]),
+              [
+                'formPasien', 'dataPasien',
+                'riwayatIGD', 'formIGD',
+                'soapPerawat', 'soapDokter'
+              ].forEach(i => delete state[i]),
               clearForm(), m.redraw(), scroll(0, 0)
            ]
           }

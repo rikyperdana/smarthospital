@@ -52,43 +52,6 @@ const guides = [
     yaitu ChatGPT 3.5 Turbo dari OpenAI.
   `},
 
-  // Kategori Bilingual
-  {category: 'Bilingual', title: 'Cara pakai', content: `
-    Menu Bilingual ini dapat kamu gunakan untuk melakukan percakapan
-    multi bahasa dengan lawan bicara yang saling tidak memahami
-    bahasa satu sama lain. Hingga saat ini sudah tersedia 13 bahasa
-    berbeda yang didukung oleh AI dalam aplikasi ini. Cukup pilih
-    bahasa yang digunakan lawan bicara, maka teks apapun yang kita
-    inputkan akan diterjemahkan ke bahasa yang ditunjuk. Tunjukkan
-    atau bacakan hasil terjemahan kepada lawan bicara, dan biarkan
-    lawan bicara tersebut memberikan respon melalui input teks
-    dengan pilihan bahasa Indonesia atau yang kamu pahami. Riwayat
-    percakapan akan terlihat dan dapat disimpan ke dalam memori
-    percakapan Bilingual bila diinginkan. Teknologi penerjemah yang
-    digunakan tidak sama dengan Google Translate, AI dapat mengenali
-    maksud pesan yang disampaikan dan menghasilkan terjemahan yang
-    paling mendekati maksud yang ingin disampaikan dalam bahasa
-    tujuan.
-  `},
-
-  // Kategori Pohon Ilmu
-  {category: 'Pohon Ilmu', title: 'Cara pakai', content: `
-    Kamu dapat menggunakan menu ini untuk membangun sebuah pohon
-    pengetahuan akan suatu topik khusus yang kamu sebutkan. Input
-    kata kunci pengetahuan yang diinginkan, maka AI akan membuat
-    sebuah pohon JSON yang berisi percabangan pengetahuan yang
-    sesuai dengan kata kunci tersebut. Ukuran pohon tersebut bisa
-    besar ataupun kecil tergantung faktor seperti seberapa spesifik
-    topik yang diminta dan seberapa paham AI tentang topik tersebut.
-    Waktu loading yang dibutuhkan AI dapat berkisar dari 1 hingga 3
-    menit. Jika lebih lama dari itu mungkin ada kendala jaringan,
-    AI yang error, atau topik yang diminta bertentangan dengan
-    batasan topik yang AI izinkan. Silahkan refresh browser untuk
-    kembalikan ke kondisi semula. Membuat pohon topik yang sama
-    pada waktu yang berbeda berpotensi mengeluarkan hasil yang
-    berbeda pula.
-  `},
-
   // Kategori Setting
   {category: 'Pengaturan', title: 'Backup/Restore', content: `
     Aplikasi ini tidak menggunakan DB di sisi server, sehingga
