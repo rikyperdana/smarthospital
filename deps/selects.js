@@ -41,27 +41,4 @@ lookUp = (category, value) => _.get(
   selects(category)().find(
     (i, j) => j+1 === value
   ), 'label'
-) || '-',
-
-isTimestamp = val =>
-  Number.isInteger(val) &&
-  (''+val).length === 13,
-
-fromPairs = arr => arr.reduce(
-  (acc, val) => (acc[val[0]] = val[1], acc), {}
-),
-
-humanReadable = (val, key) => val &&
-  typeof(val) === 'object' ? fromPairs(
-    Object.keys(val).map(item => [
-      item, humanReadable(
-        val[item], item
-      )
-    ])
-  ) : ors([
-    isTimestamp(val) &&
-    (new Date(val)).toString(),
-    references[key] &&
-    references[key][val-1],
-    val
-  ])
+) || '-'

@@ -25,7 +25,7 @@ comps.emr = x => [
       doc: _.get((state.dataPasien.igd || []).find(
         i => i.idrawat === state.igdPasien.idrawat
       ), 'soapDokter'),
-      action: doc => db.pasien.put(
+      action: doc => confirm('Yakin simpan?') && db.pasien.put(
         _.assign(state.dataPasien, {
           igd: state.dataPasien.igd.map(
             i => i.idrawat === state.igdPasien.idrawat ? _.assign(
@@ -53,7 +53,7 @@ comps.emr = x => [
         i => i.idrawat === state.igdPasien.idrawat
       ), 'soapPerawat'),
       layout: layouts.soapPerawat,
-      action: doc => db.pasien.put(
+      action: doc => confirm('Yakin simpan?') && db.pasien.put(
         _.assign(state.dataPasien, {
           igd: state.dataPasien.igd.map(
             i => i.idrawat === state.igdPasien.idrawat ? _.assign(
@@ -81,7 +81,7 @@ comps.emr = x => [
         layout: layouts.visit,
         doc: state.igdPasien,
         submit: {value: 'Simpan'},
-        action: doc => confirm('Yakin simpan SOAP?') && withAs(
+        action: doc => confirm('Yakin simpan visit?') && withAs(
           Object.assign(state.dataPasien, {
             igd: [...state.dataPasien.igd || [], doc]
           }),
@@ -141,7 +141,7 @@ comps.emr = x => [
       layout: layouts.identitas,
       doc: _.get(state, 'dataPasien.identitas'),
       submit: {value: state.dataPasien ? 'Update' : 'Simpan'},
-      action: doc => confirm('Yakin simpan ini?') && withAs(
+      action: doc => confirm('Yakin simpan RM?') && withAs(
         {id: doc.id, identitas: doc},
         pasien => db.pasien.put(pasien).then(x => [
           toggleState('formPasien'), daftarPasien()
