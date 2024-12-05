@@ -46,12 +46,6 @@ comps.aichat = x => [
       },
     }},
     action: doc => doc.message && withAs({
-      threads: JSON.parse(localStorage.threads || `[${
-        JSON.stringify({
-          message: JSON.stringify(humanReadable(state.dataPasien)),
-          role: 'user', type: 'pasien', requestTime: _.now()
-        })
-      }]`),
       threads: JSON.parse(ors([
         localStorage.threads,
         state.dataPasien && `[${JSON.stringify({
