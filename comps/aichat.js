@@ -60,8 +60,9 @@ comps.aichat = x => [
       localStorage.setItem('threads', JSON.stringify([
         ...threads, query, {message: '...berfikir', role: 'model'}
       ])),
-      (new state.aiModule.GoogleGenerativeAI(randomGemini()))
-      .getGenerativeModel({model: 'gemini-1.5-flash'})
+      (new state.aiModule.GoogleGenerativeAI(
+        JSON.parse(localStorage.geminiAPI).api
+      )).getGenerativeModel({model: 'gemini-1.5-flash'})
       .startChat({
         generateConfig: {maxOutputTokens: 100},
         history: threads.map(thread => ({
@@ -91,6 +92,7 @@ comps.aichat = x => [
           ])
         ))
       })
+      .catch(console.log)
     ]),
     submit: {value: 'Kirim'},
     buttons: localStorage.threads && [
