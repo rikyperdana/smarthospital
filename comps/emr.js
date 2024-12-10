@@ -90,19 +90,12 @@ comps.emr = x => [
           ])
         ),
         buttons: state.igdPasien && [
-          {label: 'Perawat', opt: {
-            class: 'is-success',
-            onclick: x => toggleState('soapPerawat')
-          }},
-          {label: 'Dokter', opt: {
-            class: 'is-success',
-            onclick: x => toggleState('soapDokter')
-          }},
-          {label: 'Tutup', opt: {
-            class: 'is-warning',
-            onclick: x => toggleState('formIGD')
-          }}
-        ],
+          ['Perawat', 'is-success', 'soapPerawat'],
+          ['Dokter', 'is-success', 'soapDokter'],
+          ['Tutup', 'is-warning', 'formIGD'],
+        ].map(i => ({label: i[0], opt: {
+          class: i[1], onclick: x => toggleState(i[2])
+        }}))
       }))
     ]),
 
