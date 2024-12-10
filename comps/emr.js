@@ -198,7 +198,8 @@ comps.emr = x => [
           opt: {
             class: state.formPasien ? 'is-warning' : 'is-info',
             onclick: x => [
-              [
+              toggleState('formPasien'),
+              state.dataPasien && [
                 'formPasien', 'dataPasien',
                 'riwayatIGD', 'formIGD',
                 'soapPerawat', 'soapDokter'
